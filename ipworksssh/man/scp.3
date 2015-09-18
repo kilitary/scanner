@@ -1,0 +1,356 @@
+.\" Copyright (c) 2014 /n software inc. - All rights reserved.
+.\" For more information, please visit www.nsoftware.com.
+.\"
+.TH SCP 3  2008-02-26 "IP*Works! SSH V9" "IP*Works! SSH V9 C++ Edition Manual Pages"
+
+.SH NAME
+SCP \- The SCP component can be used to transfer files to and from SSH servers using the Secure Copy Protocol (SCP).
+
+.SH SYNOPSIS
+.B #include <ipworksssh.h>
+.br
+.B #include <scp.h>
+.sp
+.BI "SCP *pInstance = new SCP();"
+.br
+
+.SH DESCRIPTION
+NOTE: The following is only a brief description of the component.  Please refer
+to the accompanying HTML documentation for complete details.
+.BR
+The SCP component can be used to transfer files to and from SSH servers using the Secure Copy Protocol (SCP).
+The SCP component is the SSH-enabled equivalent of the IP*Works! RCP component.
+The main difference is the introduction of a set of
+new properties and events that deal
+with SSH security.  The
+SSHHost
+and
+SSHPort
+properties specify the
+SSH server to use. The
+SSHUser
+and
+SSHPassword
+properties allow the 
+client to authenticate itself with the server. The
+SSHServerAuthentication
+event and/or
+SSHAcceptServerHostKey
+property allow you to check the server
+identity. Finally, the
+SSHStatus
+event provides information about the
+SSH handshake.
+
+.br
+
+The SCP component implements a standard SCP File Transfer client.
+
+.br
+
+The first step in using the component is specifying the
+SSHHost
+,
+SSHUser
+and
+SSHPassword
+.  The file to upload to or download from is given by the
+RemoteFile
+property.  The file to download to or upload from is specified by
+LocalFile
+.
+
+.br
+
+If
+LocalFile
+is set to something other than an empty string, then files are received in
+LocalFile
+, otherwise the data is received through the
+Transfer
+event.
+StartTransfer
+and
+EndTransfer
+are fired at the beginning and end of transmission.
+
+.br
+
+
+.SH PROPERTIES
+Connected
+.RS 
+Triggers a connection or disconnection.
+.RE
+.sp
+FilePermissions
+.RS 
+The file permissions for the RemoteFile .
+.RE
+.sp
+FirewallAutoDetect
+.RS 
+This property tells the component whether or not to automatically detect and use firewall system settings, if available.
+.RE
+.sp
+FirewallType
+.RS 
+This property determines the type of firewall to connect through.
+.RE
+.sp
+FirewallHost
+.RS 
+This property contains the name or IP address of firewall (optional).
+.RE
+.sp
+FirewallPassword
+.RS 
+This property contains a password if authentication is to be used when connecting through the firewall.
+.RE
+.sp
+FirewallPort
+.RS 
+This property contains the TCP port for the firewall Host .
+.RE
+.sp
+FirewallUser
+.RS 
+This property contains a user name if authentication is to be used connecting through a firewall.
+.RE
+.sp
+LocalFile
+.RS 
+The path to a local file for download/upload.  If the file exists, it is overwritten.
+.RE
+.sp
+LocalHost
+.RS 
+The name of the local host or user-assigned IP interface through which connections are initiated or accepted.
+.RE
+.sp
+LocalPort
+.RS 
+The TCP port in the local host where IPPort binds.
+.RE
+.sp
+Overwrite
+.RS 
+Whether or not the component should overwrite files during transfer.
+.RE
+.sp
+RemoteFile
+.RS 
+The name of the remote file for uploading, downloading, etc.
+.RE
+.sp
+RemotePath
+.RS 
+The remote path on the server.
+.RE
+.sp
+SSHAcceptServerHostKeyEncoded
+.RS 
+The certificate (PEM/base64 encoded).
+.RE
+.sp
+SSHAuthMode
+.RS 
+The authentication method to be used the component when performing an SSHLogon .
+.RE
+.sp
+SSHCertEncoded
+.RS 
+The certificate (PEM/base64 encoded).
+.RE
+.sp
+SSHCertStore
+.RS 
+The name of the certificate store for the client certificate.
+.RE
+.sp
+SSHCertStorePassword
+.RS 
+If the certificate store is of a type that requires  a password, this property is used to specify that  password in order to open the certificate store.
+.RE
+.sp
+SSHCertStoreType
+.RS 
+The type of certificate store for this certificate.
+.RE
+.sp
+SSHCertSubject
+.RS 
+The subject of the certificate used for client authentication.
+.RE
+.sp
+SSHCompressionAlgorithms
+.RS 
+A comma-separated list containing all allowable compression algorithms.
+.RE
+.sp
+SSHEncryptionAlgorithms
+.RS 
+A comma-separated list containing all allowable compression algorithms.
+.RE
+.sp
+SSHHost
+.RS 
+The address of the SSH host.
+.RE
+.sp
+SSHPassword
+.RS 
+The password for SSH password-based authentication.
+.RE
+.sp
+SSHPort
+.RS 
+The port on the SSH server where the SSH service is running; by default, 22.
+.RE
+.sp
+SSHUser
+.RS 
+The username for SSH authentication.
+.RE
+.sp
+Timeout
+.RS 
+A timeout for the component.
+.RE
+.sp
+
+
+.SH METHODS
+Config
+.RS 
+Sets or retrieves a configuration setting.
+.RE
+.sp
+DecodePacket
+.RS 
+Decodes a hex-encoded SSH packet.
+.RE
+.sp
+DoEvents
+.RS 
+Processes events from the internal message queue.
+.RE
+.sp
+Download
+.RS 
+Download a RemoteFile from an SCP server.
+.RE
+.sp
+EncodePacket
+.RS 
+Hex encodes an SSH packet.
+.RE
+.sp
+GetSSHParam
+.RS 
+Used to read a field from an SSH packet's payload.
+.RE
+.sp
+GetSSHParamBytes
+.RS 
+Used to read a field from an SSH packet's payload.
+.RE
+.sp
+Interrupt
+.RS 
+Interrupt the current method.
+.RE
+.sp
+SetSSHParam
+.RS 
+Used to write a field to the end of a payload.
+.RE
+.sp
+SSHLogoff
+.RS 
+Logoff from the SSH server.
+.RE
+.sp
+SSHLogon
+.RS 
+Logon to the SSHHost using the current SSHUser and SSHPassword .
+.RE
+.sp
+Upload
+.RS 
+Upload a file specified by LocalFile to an SCP server.
+.RE
+.sp
+
+
+.SH EVENTS
+Connected
+.RS 
+Fired immediately after a connection completes (or fails).
+.RE
+.sp
+ConnectionStatus
+.RS 
+Fired to indicate changes in connection state.
+.RE
+.sp
+Disconnected
+.RS 
+Fired when a connection is closed.
+.RE
+.sp
+EndTransfer
+.RS 
+Fired when a file completes downloading/uploading.
+.RE
+.sp
+Error
+.RS 
+Information about errors during data delivery.
+.RE
+.sp
+SSHCustomAuth
+.RS 
+Fired when the component is doing custom authentication.
+.RE
+.sp
+SSHKeyboardInteractive
+.RS 
+Fired when the component receives a request for user input from the server.
+.RE
+.sp
+SSHServerAuthentication
+.RS 
+Fired after the server presents its public key to the client.
+.RE
+.sp
+SSHStatus
+.RS 
+Shows the progress of the secure connection.
+.RE
+.sp
+StartTransfer
+.RS 
+Fired when a file starts downloading/uploading.
+.RE
+.sp
+Transfer
+.RS 
+Fired during file download/upload.
+.RE
+.sp
+
+
+.SH "SEE ALSO"
+.BR CertMgr (3),
+.BR PSClient (3),
+.BR SCP (3),
+.BR SExec (3),
+.BR SFTP (3),
+.BR SSHClient (3),
+.BR SSHDaemon (3),
+.BR SShell (3),
+.BR SSHReverseTunnel (3),
+.BR SSHTunnel (3),
+
+

@@ -1,0 +1,319 @@
+.\" Copyright (c) 2014 /n software inc. - All rights reserved.
+.\" For more information, please visit www.nsoftware.com.
+.\"
+.TH PSClient 3  2008-02-26 "IP*Works! SSH V9" "IP*Works! SSH V9 C++ Edition Manual Pages"
+
+.SH NAME
+PSClient \- The PSClient component can be used to execute PowerShell commands remotely 
+on PowerShell Server.
+
+.SH SYNOPSIS
+.B #include <ipworksssh.h>
+.br
+.B #include <psclient.h>
+.sp
+.BI "PSClient *pInstance = new PSClient();"
+.br
+
+.SH DESCRIPTION
+NOTE: The following is only a brief description of the component.  Please refer
+to the accompanying HTML documentation for complete details.
+.BR
+The PSClient component can be used to execute PowerShell commands remotely 
+on PowerShell Server.
+PSClient allows any PowerShell command to be executed remotely in a secure manner, using the SSH protocol.
+The results of the command execution are then returned as a list of objects, each one with a base type, an (optional) value and a collection
+of named properties.
+
+.br
+
+Note:
+By default no profiles are loaded when executing. However you can use dot-sourcing to load any profile. For example:
+
+.br
+
+<PRE>
+./profiles/YourProfile.ps1
+</PRE>
+
+
+.br
+
+
+.SH PROPERTIES
+Connected
+.RS 
+Triggers a connection or disconnection.
+.RE
+.sp
+FirewallAutoDetect
+.RS 
+This property tells the component whether or not to automatically detect and use firewall system settings, if available.
+.RE
+.sp
+FirewallType
+.RS 
+This property determines the type of firewall to connect through.
+.RE
+.sp
+FirewallHost
+.RS 
+This property contains the name or IP address of firewall (optional).
+.RE
+.sp
+FirewallPassword
+.RS 
+This property contains a password if authentication is to be used when connecting through the firewall.
+.RE
+.sp
+FirewallPort
+.RS 
+This property contains the TCP port for the firewall Host .
+.RE
+.sp
+FirewallUser
+.RS 
+This property contains a user name if authentication is to be used connecting through a firewall.
+.RE
+.sp
+LocalHost
+.RS 
+The name of the local host or user-assigned IP interface through which connections are initiated or accepted.
+.RE
+.sp
+LocalPort
+.RS 
+The TCP port in the local host where IPPort binds.
+.RE
+.sp
+PSObjectPropertyCount
+.RS 
+The number of records in the PSObjectProperty arrays.
+.RE
+.sp
+PSObjectPropertyDataType
+.RS 
+The type of this property Each property has a unique name, a value, a type and a boolean value indicating if it's null.
+.RE
+.sp
+PSObjectPropertyIsNull
+.RS 
+True, if the property has a null value Each property has a unique name, a value, a type and a boolean value indicating if it's null.
+.RE
+.sp
+PSObjectPropertyName
+.RS 
+The name of a property Each property has a unique name, a value, a type and a boolean value indicating if it's null.
+.RE
+.sp
+PSObjectPropertyValue
+.RS 
+The value of this property Each property has a unique name, a value, a type and a boolean value indicating if it's null.
+.RE
+.sp
+PSObjectBaseType
+.RS 
+The base type name of the current output object.
+.RE
+.sp
+PSObjectCount
+.RS 
+The number of objects returned by the pipeline execution.
+.RE
+.sp
+PSObjectIndex
+.RS 
+The index of the current object selected in the list of outputs.
+.RE
+.sp
+PSObjectValue
+.RS 
+The value of the current output object.
+.RE
+.sp
+SSHAcceptServerHostKeyEncoded
+.RS 
+The certificate (PEM/base64 encoded).
+.RE
+.sp
+SSHAuthMode
+.RS 
+The authentication method to be used the component when performing an SSHLogon .
+.RE
+.sp
+SSHCertEncoded
+.RS 
+The certificate (PEM/base64 encoded).
+.RE
+.sp
+SSHCertStore
+.RS 
+The name of the certificate store for the client certificate.
+.RE
+.sp
+SSHCertStorePassword
+.RS 
+If the certificate store is of a type that requires  a password, this property is used to specify that  password in order to open the certificate store.
+.RE
+.sp
+SSHCertStoreType
+.RS 
+The type of certificate store for this certificate.
+.RE
+.sp
+SSHCertSubject
+.RS 
+The subject of the certificate used for client authentication.
+.RE
+.sp
+SSHCompressionAlgorithms
+.RS 
+A comma-separated list containing all allowable compression algorithms.
+.RE
+.sp
+SSHEncryptionAlgorithms
+.RS 
+A comma-separated list containing all allowable compression algorithms.
+.RE
+.sp
+SSHHost
+.RS 
+The address of the SSH host.
+.RE
+.sp
+SSHKeyExchangeAlgorithms
+.RS 
+A comma-separated list containing all allowable key exchange algorithms.
+.RE
+.sp
+SSHMacAlgorithms
+.RS 
+A comma-separated list containing all allowable message authentication algorithms.
+.RE
+.sp
+SSHPassword
+.RS 
+The password for SSH password-based authentication.
+.RE
+.sp
+SSHPort
+.RS 
+The port on the SSH server where the SSH service is running; by default, 22.
+.RE
+.sp
+SSHPublicKeyAlgorithms
+.RS 
+A comma-separated list containing all allowable public key authentication algorithms.
+.RE
+.sp
+SSHUser
+.RS 
+The username for SSH authentication.
+.RE
+.sp
+Timeout
+.RS 
+A timeout for the component.
+.RE
+.sp
+
+
+.SH METHODS
+ClearOutput
+.RS 
+Clears the output list.
+.RE
+.sp
+Config
+.RS 
+Sets or retrieves a configuration setting.
+.RE
+.sp
+DoEvents
+.RS 
+Processes events from the internal message queue.
+.RE
+.sp
+Execute
+.RS 
+Execute a command on the remote PowerShell Server.
+.RE
+.sp
+GetPropertyValue
+.RS 
+Looks up a property by name and returns the value.
+.RE
+.sp
+Interrupt
+.RS 
+Stop execution of a running command.
+.RE
+.sp
+SSHLogoff
+.RS 
+Logoff from the SSH server.
+.RE
+.sp
+SSHLogon
+.RS 
+Logon to the selected server.
+.RE
+.sp
+
+
+.SH EVENTS
+Connected
+.RS 
+Fired immediately after a connection completes (or fails).
+.RE
+.sp
+ConnectionStatus
+.RS 
+Fired to indicate changes in connection state.
+.RE
+.sp
+Disconnected
+.RS 
+Fired when a connection is closed.
+.RE
+.sp
+Error
+.RS 
+Information about errors during data delivery.
+.RE
+.sp
+PSObject
+.RS 
+Fires when a new object is parsed on the server output.
+.RE
+.sp
+SSHKeyboardInteractive
+.RS 
+Fired when the component receives a request for user input from the server.
+.RE
+.sp
+SSHServerAuthentication
+.RS 
+Fired after the server presents its public key to the client.
+.RE
+.sp
+SSHStatus
+.RS 
+Shows the progress of the secure connection.
+.RE
+.sp
+
+
+.SH "SEE ALSO"
+.BR CertMgr (3),
+.BR PSClient (3),
+.BR SCP (3),
+.BR SExec (3),
+.BR SFTP (3),
+.BR SSHClient (3),
+.BR SSHDaemon (3),
+.BR SShell (3),
+.BR SSHReverseTunnel (3),
+.BR SSHTunnel (3),
+
+

@@ -1,0 +1,316 @@
+.\" Copyright (c) 2014 /n software inc. - All rights reserved.
+.\" For more information, please visit www.nsoftware.com.
+.\"
+.TH SShell 3  2008-02-26 "IP*Works! SSH V9" "IP*Works! SSH V9 C++ Edition Manual Pages"
+
+.SH NAME
+SShell \- The SShell component is used to open a shell connection to an SSH server.
+
+.SH SYNOPSIS
+.B #include <ipworksssh.h>
+.br
+.B #include <sshell.h>
+.sp
+.BI "SShell *pInstance = new SShell();"
+.br
+
+.SH DESCRIPTION
+NOTE: The following is only a brief description of the component.  Please refer
+to the accompanying HTML documentation for complete details.
+.BR
+The SShell component is used to open a shell connection to an SSH server.
+The SShell component establishes a Secure Shell connection to a server and starts up the user's default shell. Using the component is very simple. The destination is specified by the
+SSHHost
+property, and the login information is given by the
+SSHUser
+and
+SSHPassword
+properties. Then call the
+SSHLogon
+method to establish a permanent, secure connection to the SSH server. For each command you wish to execute, simply call the
+Execute
+command or set the
+Command
+property with the command you wish to execute as the parameter. Further input can be supplied to the
+Text
+parameter of the
+Send
+method or via the
+Stdin
+property.
+
+.br
+
+The output of the command is returned through the
+Stdout
+event. If an error happens on the protocol level, the error message can be found in the
+ErrorMessage
+property. Errors during command execution (the stderr stream) are given by the
+Stderr
+event.
+
+.br
+
+
+.SH PROPERTIES
+Command
+.RS 
+The command to be sent to the remote host.
+.RE
+.sp
+Connected
+.RS 
+Triggers a connection or disconnection.
+.RE
+.sp
+ErrorMessage
+.RS 
+The error message returned when any of the steps prior to command execution fail.
+.RE
+.sp
+FirewallAutoDetect
+.RS 
+This property tells the component whether or not to automatically detect and use firewall system settings, if available.
+.RE
+.sp
+FirewallType
+.RS 
+This property determines the type of firewall to connect through.
+.RE
+.sp
+FirewallHost
+.RS 
+This property contains the name or IP address of firewall (optional).
+.RE
+.sp
+FirewallPassword
+.RS 
+This property contains a password if authentication is to be used when connecting through the firewall.
+.RE
+.sp
+FirewallPort
+.RS 
+This property contains the TCP port for the firewall Host .
+.RE
+.sp
+FirewallUser
+.RS 
+This property contains a user name if authentication is to be used connecting through a firewall.
+.RE
+.sp
+LocalHost
+.RS 
+The name of the local host or user-assigned IP interface through which connections are initiated or accepted.
+.RE
+.sp
+LocalPort
+.RS 
+The TCP port in the local host where IPPort binds.
+.RE
+.sp
+SSHAcceptServerHostKeyEncoded
+.RS 
+The certificate (PEM/base64 encoded).
+.RE
+.sp
+SSHAuthMode
+.RS 
+The authentication method to be used the component when performing an SSHLogon .
+.RE
+.sp
+SSHCertEncoded
+.RS 
+The certificate (PEM/base64 encoded).
+.RE
+.sp
+SSHCertStore
+.RS 
+The name of the certificate store for the client certificate.
+.RE
+.sp
+SSHCertStorePassword
+.RS 
+If the certificate store is of a type that requires  a password, this property is used to specify that  password in order to open the certificate store.
+.RE
+.sp
+SSHCertStoreType
+.RS 
+The type of certificate store for this certificate.
+.RE
+.sp
+SSHCertSubject
+.RS 
+The subject of the certificate used for client authentication.
+.RE
+.sp
+SSHCompressionAlgorithms
+.RS 
+A comma-separated list containing all allowable compression algorithms.
+.RE
+.sp
+SSHEncryptionAlgorithms
+.RS 
+A comma-separated list containing all allowable compression algorithms.
+.RE
+.sp
+SSHHost
+.RS 
+The address of the SSH host.
+.RE
+.sp
+SSHPassword
+.RS 
+The password for SSH password-based authentication.
+.RE
+.sp
+SSHPort
+.RS 
+The port on the SSH server where the SSH service is running; by default, 22.
+.RE
+.sp
+SSHUser
+.RS 
+The username for SSH authentication.
+.RE
+.sp
+Stdin
+.RS 
+A string of data to be sent to the remote host while connected.
+.RE
+.sp
+Timeout
+.RS 
+A timeout for the component.
+.RE
+.sp
+
+
+.SH METHODS
+Config
+.RS 
+Sets or retrieves a configuration setting.
+.RE
+.sp
+DecodePacket
+.RS 
+Decodes a hex-encoded SSH packet.
+.RE
+.sp
+DoEvents
+.RS 
+Processes events from the internal message queue.
+.RE
+.sp
+EncodePacket
+.RS 
+Hex encodes an SSH packet.
+.RE
+.sp
+Execute
+.RS 
+Execute a Command on the remote host.
+.RE
+.sp
+GetSSHParam
+.RS 
+Used to read a field from an SSH packet's payload.
+.RE
+.sp
+GetSSHParamBytes
+.RS 
+Used to read a field from an SSH packet's payload.
+.RE
+.sp
+Interrupt
+.RS 
+Interrupt the current method.
+.RE
+.sp
+Send
+.RS 
+Send standard input to the program executing on the remote host.
+.RE
+.sp
+SetSSHParam
+.RS 
+Used to write a field to the end of a payload.
+.RE
+.sp
+SSHLogoff
+.RS 
+Logoff from the SSH server.
+.RE
+.sp
+SSHLogon
+.RS 
+Logon to the SSHHost using the current SSHUser and SSHPassword .
+.RE
+.sp
+
+
+.SH EVENTS
+Connected
+.RS 
+Fired immediately after a connection completes (or fails).
+.RE
+.sp
+ConnectionStatus
+.RS 
+Fired to indicate changes in connection state.
+.RE
+.sp
+Disconnected
+.RS 
+Fired when a connection is closed.
+.RE
+.sp
+Error
+.RS 
+Information about errors during data delivery.
+.RE
+.sp
+SSHCustomAuth
+.RS 
+Fired when the component is doing custom authentication.
+.RE
+.sp
+SSHKeyboardInteractive
+.RS 
+Fired when the component receives a request for user input from the server.
+.RE
+.sp
+SSHServerAuthentication
+.RS 
+Fired after the server presents its public key to the client.
+.RE
+.sp
+SSHStatus
+.RS 
+Shows the progress of the secure connection.
+.RE
+.sp
+Stderr
+.RS 
+Fired when data (complete lines) come in through stderr.
+.RE
+.sp
+Stdout
+.RS 
+Fired when data (complete lines) come in through stdout.
+.RE
+.sp
+
+
+.SH "SEE ALSO"
+.BR CertMgr (3),
+.BR PSClient (3),
+.BR SCP (3),
+.BR SExec (3),
+.BR SFTP (3),
+.BR SSHClient (3),
+.BR SSHDaemon (3),
+.BR SShell (3),
+.BR SSHReverseTunnel (3),
+.BR SSHTunnel (3),
+
+

@@ -1,0 +1,371 @@
+.\" Copyright (c) 2014 /n software inc. - All rights reserved.
+.\" For more information, please visit www.nsoftware.com.
+.\"
+.TH CertMgr 3  2008-02-26 "IP*Works! SSH V9" "IP*Works! SSH V9 C++ Edition Manual Pages"
+
+.SH NAME
+CertMgr \- The CertMgr component is used to manage the digital certificates installed
+on a system.
+
+.SH SYNOPSIS
+.B #include <ipworksssh.h>
+.br
+.B #include <certmgr.h>
+.sp
+.BI "CertMgr *pInstance = new CertMgr();"
+.br
+
+.SH DESCRIPTION
+NOTE: The following is only a brief description of the component.  Please refer
+to the accompanying HTML documentation for complete details.
+.BR
+The CertMgr component is used to manage the digital certificates installed
+on a system.
+The component methods, such as
+ListCertificateStores
+or
+ListStoreCertificates
+,
+are used to list certificate stores and certificates.  The corresponding lists are returned 
+via the
+StoreList
+and
+CertList
+events.  Encoded certificates are 
+provided through the events.
+
+.br
+
+You can load a certificate by setting the
+Cert
+property of the
+component, then you can get information about the certificate through the corresponding 
+fields of the
+Cert
+property (described below).
+
+.br
+
+The
+Subject
+,
+SerialNumber
+, and
+Issuer
+properties
+identify the certificate. The
+EffectiveDate
+and
+ExpirationDate
+show the time boundaries
+of the certificate.
+
+.br
+
+PublicKey
+,
+PublicKeyAlgorithm
+,
+PublicKeyLength
+, and
+Version
+provide information about the certificate keys and the
+certificate format (version).
+
+.br
+
+UsageFlags
+specifies the intended usage of the certificate.  The
+Usage
+property provides a text description of these flags.
+
+.br
+
+
+.SH PROPERTIES
+CertEffectiveDate
+.RS 
+The date which this certificate becomes valid.
+.RE
+.sp
+CertEncoded
+.RS 
+The certificate (PEM/base64 encoded).
+.RE
+.sp
+CertExpirationDate
+.RS 
+The date the certificate expires.
+.RE
+.sp
+CertExtendedKeyUsage
+.RS 
+A comma-delimited list of extended key usage identifiers.
+.RE
+.sp
+CertFingerprint
+.RS 
+The hex-encoded, 16-byte MD5 fingerprint of the certificate.
+.RE
+.sp
+CertIssuer
+.RS 
+The issuer of the certificate.
+.RE
+.sp
+CertKeyPassword
+.RS 
+The password for the certificate's private key (if any).
+.RE
+.sp
+CertPrivateKey
+.RS 
+The private key of the certificate (if available).
+.RE
+.sp
+CertPrivateKeyAvailable
+.RS 
+Shows whether a PrivateKey is available for the  selected certificate.
+.RE
+.sp
+CertPrivateKeyContainer
+.RS 
+The name of the PrivateKey container for the  certificate (if available).
+.RE
+.sp
+CertPublicKey
+.RS 
+The public key of the certificate.
+.RE
+.sp
+CertPublicKeyAlgorithm
+.RS 
+Textual description of the public key algorithm of the  certificate.
+.RE
+.sp
+CertPublicKeyLength
+.RS 
+The length of the certificate public key (in bits).
+.RE
+.sp
+CertSerialNumber
+.RS 
+The serial number of the certificate encoded as a  string.
+.RE
+.sp
+CertSignatureAlgorithm
+.RS 
+Text description of the signature algorithm of the  certificate.
+.RE
+.sp
+CertSubject
+.RS 
+The subject of the certificate used for client authentication.
+.RE
+.sp
+CertSubjectAltNames
+.RS 
+A comma-separated lists of alternative subject names of the certificate.
+.RE
+.sp
+CertThumbprintMD5
+.RS 
+MD5 hash of the certificate.
+.RE
+.sp
+CertThumbprintSHA1
+.RS 
+SHA1 hash of the certificate.
+.RE
+.sp
+CertUsage
+.RS 
+Text description of UsageFlags .
+.RE
+.sp
+CertUsageFlags
+.RS 
+Flags that show intended use for the certificate.
+.RE
+.sp
+CertVersion
+.RS 
+The certificate's version number.
+.RE
+.sp
+CertExtensionCount
+.RS 
+The number of records in the CertExtension arrays.
+.RE
+.sp
+CertExtensionCritical
+.RS 
+Whether or not the extension is defined as critical.
+.RE
+.sp
+CertExtensionOID
+.RS 
+The ASN.
+.RE
+.sp
+CertExtensionValue
+.RS 
+The raw value of this certificate extension.
+.RE
+.sp
+CertStore
+.RS 
+The certificate store to search for certificates.
+.RE
+.sp
+CertStorePassword
+.RS 
+The password for the certificate store (if any).
+.RE
+.sp
+CertStoreType
+.RS 
+The type of certificate store for CertStore .
+.RE
+.sp
+
+
+.SH METHODS
+Config
+.RS 
+Sets or retrieves a configuration setting.
+.RE
+.sp
+CreateCertificate
+.RS 
+Creates a new self-signed certificate in the current store.
+.RE
+.sp
+CreateKey
+.RS 
+Creates a new keyset associated with the provided name.
+.RE
+.sp
+DeleteCertificate
+.RS 
+Deletes the currently selected certificate from the store.
+.RE
+.sp
+DeleteKey
+.RS 
+Deletes the keyset associated with the provided name.
+.RE
+.sp
+ExportCertificate
+.RS 
+Saves the current certificate to a PFX file.
+.RE
+.sp
+GenerateCSR
+.RS 
+Generates a new CSR to be sent to a signing authority.
+.RE
+.sp
+ImportCertificate
+.RS 
+Imports a certificate from a PFX file into the current certificate store.
+.RE
+.sp
+ImportSignedCSR
+.RS 
+Imports a signed CSR.
+.RE
+.sp
+IssueCertificate
+.RS 
+Creates a new certificate in the current store, signed by the selected certificate.
+.RE
+.sp
+ListCertificateStores
+.RS 
+Lists certificate stores.
+.RE
+.sp
+ListKeys
+.RS 
+List keysets in a CSP.
+.RE
+.sp
+ListMachineStores
+.RS 
+List machine certificate stores.
+.RE
+.sp
+ListStoreCertificates
+.RS 
+List certificates in a store.
+.RE
+.sp
+ReadCertificate
+.RS 
+Loads a certificate from a file.
+.RE
+.sp
+Reset
+.RS 
+Resets all certificate properties to their default values.
+.RE
+.sp
+SaveCertificate
+.RS 
+Saves the current certificate to a file.
+.RE
+.sp
+ShowCertificateChain
+.RS 
+Show certificate chain.
+.RE
+.sp
+SignCSR
+.RS 
+Creates a signed certificate from a CSR.
+.RE
+.sp
+
+
+.SH EVENTS
+CertChain
+.RS 
+Shows the certificate chain for the certificate (see the ShowCertificateChain method).
+.RE
+.sp
+CertList
+.RS 
+Lists the certificates in a store (see the ListStoreCertificates method).
+.RE
+.sp
+Error
+.RS 
+Information about errors during data delivery.
+.RE
+.sp
+KeyList
+.RS 
+Lists the keysets in a CSP (see the ListKeys method).
+.RE
+.sp
+StoreList
+.RS 
+Lists the system certificate stores (see the ListCertificateStores and ListMachineStores methods).
+.RE
+.sp
+
+
+.SH "SEE ALSO"
+.BR CertMgr (3),
+.BR PSClient (3),
+.BR SCP (3),
+.BR SExec (3),
+.BR SFTP (3),
+.BR SSHClient (3),
+.BR SSHDaemon (3),
+.BR SShell (3),
+.BR SSHReverseTunnel (3),
+.BR SSHTunnel (3),
+
+
