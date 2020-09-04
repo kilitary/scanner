@@ -78,4 +78,4 @@ clean:
 	rm -rf /Users/$(MACOSUSER)/Library/Frameworks/IPWorksSSH.framework
 
 %.o:%.cpp
-	g++ $(CFLAGS) $(OS_CFLAGS) -o $*.o $*.cpp
+	g++-4.8 $(CFLAGS) $(OS_CFLAGS) -o $*.o $*.cpp

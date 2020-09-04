@@ -1,11 +1,11 @@
-CC=g++49
+CC=g++
 CFLAGS=-g -lz  -lssl -lcrypto -w -fpermissive -lssh2 -I/usr/local/include -L/usr/local/lib   -lpthread
-all: clean scanner ddos
+all: clean scanner 
 
 ddos:
 	$(CC) ddos.cpp ddos.h /data/projects/scanner/ipworksssh/src/ipworksssh.o -o ddos $(CFLAGS) 
 scanner:
-	$(CC) scanner.cpp /data/projects/scanner/ipworksssh/src/ipworksssh.o -o scanner $(CFLAGS) 
+	$(CC) scanner.cpp -o scanner $(CFLAGS) 
 
 scanner.o:
 	$(CC)  -c scanner.cpp $(CFLAGS)
