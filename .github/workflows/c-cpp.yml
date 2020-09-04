@@ -15,5 +15,7 @@ jobs:
     - uses: actions/checkout@v2
     - name: libssh2-1-dev
       run: sudo  apt install libssh2-1-dev
+    - name: boost
+      run: sudo  apt install libboost-all-dev
     - name: make
       run: make
