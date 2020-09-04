@@ -29,6 +29,9 @@ using namespace std;
 using namespace fx;
 using namespace boost;
 
+#include <iostream>
+#include <fstream>
+
 
 #define NORMAL "\033[0m"
 #define BOLD (char)27 << "[1m"

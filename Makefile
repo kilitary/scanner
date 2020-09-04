@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS=-g -lz  -lssl -lcrypto -w -fpermissive -lssh2 -I/usr/local/include -L/usr/local/lib   -lpthread
+CFLAGS= -g -lz  -lssl -lcrypto -w -fpermissive -lssh2 -I/usr/local/include -L/usr/local/lib   -lpthread
 all: clean scanner 
 
 ddos:

