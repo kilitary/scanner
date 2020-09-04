@@ -13,5 +13,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: libssh2-1-dev
+      run: apt install libssh2-1-dev
     - name: make
       run: make
